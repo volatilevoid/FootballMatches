@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FootballMatches.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,10 +27,26 @@ namespace FootballMatches
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            /**
+             * Configure SQLite in memory connection and add DB context
+             * 
+             * SQLite in memory BD ceases to exist after connection is closed
+             * DbContext automatically opens and closes connections to the database
+             * unless already opened connection is passed
+             * 
+             */
+            SqliteConnection keepAliveConnection = new SqliteConnection("DataSource=:memory:");
+            keepAliveConnection.Open();
+            // Pass already opened connection 
+            services.AddDbContext<ApplicationDbContext>(options => 
+            {
+                options.UseSqlite(keepAliveConnection);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +71,10 @@ namespace FootballMatches
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Migrate tables on start
+            context.Database.EnsureCreated();
         }
+
     }
 }
