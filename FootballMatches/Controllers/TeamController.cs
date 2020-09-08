@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FootballMatches.Data;
 using FootballMatches.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FootballMatches.Controllers
@@ -11,9 +14,11 @@ namespace FootballMatches.Controllers
     public class TeamController : Controller
     {
         private readonly ITeamRepository _teamRepository;
-        public TeamController(ITeamRepository teamRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public TeamController(ITeamRepository teamRepository, IWebHostEnvironment webHostEnvironment)
         {
             _teamRepository = teamRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
         /**
          * All teams
@@ -31,6 +36,22 @@ namespace FootballMatches.Controllers
         {
             var team = _teamRepository.Get(id);
             return View(team);
+        }
+        /**
+         * Add new team
+         */
+        [HttpPost]
+        public IActionResult Add(string teamName, string teamDescription, IFormFile logo)
+        {
+            var newTeam = new Team()
+            {
+                Name = teamName,
+                Description = teamDescription,
+                Logo = logo == null ? "default_logo.png" : UploadedImage(logo)
+            };
+            _teamRepository.Add(newTeam);
+            _teamRepository.Save();
+            return RedirectToAction("Index");
         }
         /**
          * Remove player from team
@@ -57,6 +78,26 @@ namespace FootballMatches.Controllers
             _teamRepository.Save();
 
             return RedirectToAction("Details", new { id = teamId });
+        }
+
+        /**
+         * Proccess uploaded team logo
+         * 
+         * Generate unique file name
+         * Store image in filesystem
+         * return new image name 
+         */
+        private string UploadedImage(IFormFile image)
+        {
+            string uniqueFileName;
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                image.CopyTo(fileStream);
+            }
+            return uniqueFileName;
         }
     }
 }

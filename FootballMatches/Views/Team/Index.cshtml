@@ -35,14 +35,27 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1>test</h1>
+                    <p>Create team</p>
                 </div>
                 <div class="modal-body">
-                    <!-- TODO: new modal form -->
+                    <form enctype="multipart/form-data" id="add-team-form" asp-controller="Team" asp-action="Add">
+                        <div class="form-group">
+                            <label for="teamName">Name</label>
+                            <input id="teamName" type="text" class="form-control" name="teamName">
+                        </div>
+                        <div class="form-group">
+                            <label for="teamDescription">Description</label>
+                            <textarea id="teamDescription" class="form-control" name="teamDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamLogo">Logo</label>
+                            <input type="file" class="form-control-file" id="teamLogo" name="logo">
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>
-                    <button type="button" class="btn btn-danger mx-2" data-dismiss="modal">Cancel</button>
+                    <button id="add-team-confirm" type="button" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>
+                    <button id="add-team-cancel" type="button" class="btn btn-danger mx-2" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

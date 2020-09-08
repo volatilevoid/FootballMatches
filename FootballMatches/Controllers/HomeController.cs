@@ -23,30 +23,7 @@ namespace FootballMatches.Controllers
 
         public IActionResult Index()
         {
-            // Test
-            var team = _context.Teams.Find(1);
-            var player = _context.Players.Find(1);
-            var match = new Match()
-            {
-                Id = 1,
-                HostTeamId = 1,
-                GuestTeamId = 2,
-            };
-            _context.Matches.Add(match);
-            var playersInMatch = new MatchPlayer()
-            {
-                MatchId = match.Id,
-                PlayerId = player.Id
-            };
-            var goal = new Goal()
-            {
-                Id = 1,
-                MatchPlayer = playersInMatch
-            };
-            _context.Goals.Add(goal);
-            var test2 = _context.Goals.Find(1);
-            var test = _context.Matches.Find(1);
-            return View(player);
+            return RedirectToAction("Index", "Team");
         }
 
         public string Test()
