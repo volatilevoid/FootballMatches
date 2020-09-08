@@ -68,10 +68,13 @@ namespace FootballMatches
             // Test
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 1, Name = "ac milan" });
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 2, Name = "fk Pobjeda Trijesnica" });
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 1, Name="Igrac 1", TeamId = 1, IsActive = true});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 2, Name="Igrac 2", TeamId = 1, IsActive = true});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 3, Name="Igrac 3", TeamId = 2, IsActive = true});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 4, Name="Igrac 4", TeamId = 2, IsActive = true});
+            modelBuilder.Entity<Team>().HasData(new Team() { Id = 3, Name = "fk Proleter Dvorovi" });
+            modelBuilder.Entity<Team>().HasData(new Team() { Id = 4, Name = "fk Bacac Golo Brdo" });
+            modelBuilder.Entity<Team>().HasData(new Team() { Id = 5, Name = "fc Real Madrid" });
+            modelBuilder.Entity<Player>().HasData(new Player() { Id = 1, Name="Igrac 1", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id = 2, Name="Igrac 2", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id = 3, Name="Igrac 3", TeamId = 2});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id = 4, Name="Igrac 4", TeamId = 2});
         }
     }
 }

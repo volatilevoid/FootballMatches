@@ -14,7 +14,7 @@ namespace FootballMatches.Data
         Team Get(int teamId);
         //void Update(Team team);
         void AddPlayer(Player player);
-        void RemovePlayer(Player player);
+        void RemovePlayer(int id, int teamId);
         void Save();
     }
     public class TeamRepository : ITeamRepository
@@ -57,17 +57,26 @@ namespace FootballMatches.Data
         public void AddPlayer(Player player)
         {
             var team = _context.Teams
-                .Find(player.TeamId);
+                .Include(t => t.Players)
+                .Where(t => t.Id == player.TeamId)
+                .FirstOrDefault();
 
             team.Players.Add(player);
         }
         /*
          * Remove player from team
          */
-        public void RemovePlayer(Player player)
+        public void RemovePlayer(int id, int teamId)
         {
-            var team = _context.Teams. Find(player.Id);
-            team.Players.Remove(player);
+            var team = _context.Teams
+                .Include(t => t.Players)
+                .Where(t => t.Id == teamId).FirstOrDefault();
+
+            var playerToRemove = team.Players
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+                
+            team.Players.Remove(playerToRemove);
         }
         public void Save()
         {

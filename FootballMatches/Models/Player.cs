@@ -14,7 +14,6 @@ namespace FootballMatches.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsActive { get; set; }
         public int TeamId { get; set; }
         public Team Team { get; set; }
         public List<MatchPlayer> MatchPlayers { get; set; }
