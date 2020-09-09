@@ -90,4 +90,12 @@ body {
 }
 .match-players {
     border: 1px solid #ced4da;
+    max-height: 220px;
+    overflow: auto;
+}
+select option:disabled {
+    color: #dc3545;
+}
+.custom-validator {
+    color: #dc3545;
 }

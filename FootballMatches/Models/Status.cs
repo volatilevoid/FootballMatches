@@ -13,7 +13,10 @@ namespace FootballMatches.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public bool IsMatchChangeable { get; set; }
+        public bool IsMatchStateChangeable { get; set; }
+        // In case of canceled match teams are free to arrange play other match on same date
+        public bool AreTeamsAvailable { get; set; }
+        public bool Default { get; set; }
         public List<Match> Matches { get; set; }
     }
 }

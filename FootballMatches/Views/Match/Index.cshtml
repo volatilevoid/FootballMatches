@@ -32,7 +32,7 @@
                         <td><div class="color-swatch" style="background-color: @match.Status.Color"></div></td>
                         <td>@match.HostTeam.Name</td>
                         <td>@match.GuestTeam.Name</td>
-                        <td>@match.Time</td>
+                        <td>@String.Format("{0}/{1}/{2}", match.Time.Day, match.Time.Month, match.Time.Year)</td>
                         <td>@match.Place</td>
                         <td>@String.Format("{0} : {1}", match.HomeScore, match.GuestScore)</td>
                         <td><a class="btn btn-primary" asp-controller="Match" asp-action="Details" asp-route-id="@match.Id">Details</a></td>

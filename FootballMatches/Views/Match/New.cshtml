@@ -1,35 +1,25 @@
 ﻿@model FootballMatches.ViewModels.NewMatchViewModel
 <div class="d-flex flex-column">
     <h1 class="h2 text-center">New match</h1>
-    <form class="new-match d-flex justify-content-between p-4">
+    <!--<form asp-controller="Match" asp-action="Create" id="add-match-form" class="new-match d-flex justify-content-between p-4">-->
+    <form id="add-match-form" class="new-match d-flex justify-content-between p-4">
 
         <div class="match-team d-flex flex-column justify-content-between">
             <div class="form-group">
-                @* ADD LABELS *@
                 <label for="host-team" class="text-center"><h2 class="h3">Host</h2></label>
-                <select id="host-team" class="custom-select form-control mb-4">
-                    <option selected>Select Host</option>
+                <select id="host-team" name="host-team" class="custom-select form-control mb-4">
+                    <option selected value="">Select Host</option>
                     @foreach (var team in Model.availableTeams)
                     {
                         <option class="host host-@team.Id" value="@team.Id">@team.Name</option>
-
                     }
                 </select>
+                @* VALIDATION *@
+                <div id="host-invalid" class="invisible custom-validator">Select Host team!</div>
             </div>
-
-            <div class="home-players match-players form-group p-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label" for="inlineRadio1">sssssssss</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">asdfasdf</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-                    <label class="form-check-label" for="inlineRadio3">sssssaaaaassssdf</label>
-                </div>
+            <div class="d-flex flex-column">
+                <div class="host-players match-players form-group p-4"></div>
+                <div id="host-team-invalid" class="invisible custom-validator">Minimum 6 players have to be chosen!</div>
             </div>
 
         </div>
@@ -37,12 +27,14 @@
         <div class="match-details d-flex flex-column justify-content-around">
             <div class="form-group">
                 <label for="match-place-input">Place</label>
-                <input type="text" class="form-control" id="match-place-input">
+                <input type="text" name="match-place" class="form-control" id="match-place-input">
+                @* VALIDATION *@
+                <div id="place-invalid" class="invisible custom-validator">Enter match place!</div>
             </div>
             <div id="match-datepicker" class="form-group">
                 <label for="seleted-date">Match date</label>
                 <div class="input-group date">
-                    <input id="selected-date" type="text" class="form-control" value="@DateTime.Today.Date.ToString("MM/dd/yyyy")">
+                    <input id="selected-date" name="match-date" type="text" class="form-control" value="@DateTime.Today.Date.ToString("MM/dd/yyyy")">
                 </div>
             </div>
         </div>
@@ -50,34 +42,25 @@
         <div class="match-team d-flex flex-column  justify-content-between">
 
             <div class="form-group">
-                @* ADD LABELS *@
                 <label for="guest-team" class="text-center"><h2 class="h3">Host</h2></label>
-                <select id="guest-team" class="custom-select form-control mb-4">
-                    <option selected>Select Host</option>
+                <select id="guest-team" name="guest-team" class="custom-select form-control mb-4">
+                    <option selected value="">Select Guest</option>
                     @foreach (var team in Model.availableTeams)
                     {
                         <option class="guest guest-@team.Id" value="@team.Id">@team.Name</option>
-
                     }
                 </select>
+                <div id="guest-invalid" class="invisible custom-validator">Choose Guest team!</div>
             </div>
-
-            <div class="guest-players match-players form-group p-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label" for="inlineRadio1">sssssssss</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">asdfasdf</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-                    <label class="form-check-label" for="inlineRadio3">sssssaaaaassssdf</label>
-                </div>
+            <div class="d-flex flex-column">
+                <div class="guest-players match-players form-group p-4"></div>
+                <div id="guest-team-invalid" class="invisible custom-validator">Minimum 6 players have to be chosen!</div>
             </div>
 
         </div>
     </form>
-    <div class="d-flex justify-content-end">actions</div>
+    <div class="d-flex justify-content-end">
+        <button id="add-match-confirm" type="button" class="btn btn-primary mx-3">Save</button>
+        <a asp-controller="Match" asp-action="Index" class="btn btn-danger mr-4">Cancel</a>
+    </div>
 </div>

@@ -36,21 +36,39 @@ namespace FootballMatches.Controllers
         {
             var viewModel = new NewMatchViewModel()
             {
-                availableTeams = AvailableTeams(DateTime.Today),
+                availableTeams = _matchRepository.AvailableTeams(DateTime.Today),
                 statuses = _matchRepository.Statuses()
             };
 
             return View(viewModel);
         }
-        [HttpGet]
-        public List<Team> AvailableTeams(DateTime matchDate)
+        [HttpPost]
+        public JsonResult Create(int hostId, int guestId, string matchDate, string matchPlace, int[] hostPlayers, int[] guestPlayers)
         {
-            return _matchRepository.AvailableTeams(matchDate);
+            // TODO: backend validation + store new match
+            Team hostTeam = _matchRepository.Team(hostId);
+            Team guestTeam = _matchRepository.Team(guestId);
+            Status defaultStatus = _matchRepository.DefaultStatus();
+
+
+            return Json(new { matchCreated = true });
         }
+        /**
+         * Get teams that don't have match on matchDate
+         */
+        [HttpGet]
+        public List<Team> AvailableTeams(string matchDate)
+        {
+            return _matchRepository.AvailableTeams(DateTime.Parse(matchDate));
+        }
+        /**
+         * Get available team players for match
+         */
         [HttpGet]
         public List<Player> AvailablePlayers(int teamId)
         {
             return _matchRepository.AvailablePlayers(teamId);
         }
+
     }
 }

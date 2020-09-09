@@ -13,9 +13,11 @@ namespace FootballMatches.Data
         //void Add(Match match);
         Match Get(int id);
         List<Status> Statuses();
+        Status DefaultStatus();
         void Update(Match match);
         void Save();
         public List<Team> AvailableTeams(DateTime matchDate);
+        public Team Team(int teamId);
         public List<Player> AvailablePlayers(int teamId);
     }
     public class MatchRepository : IMatchRepository
@@ -41,6 +43,12 @@ namespace FootballMatches.Data
             return _context.Statuses
                 .ToList();
         }
+        public Status DefaultStatus()
+        {
+            return _context.Statuses
+                .Where(s => s.Default == true)
+                .FirstOrDefault();
+        }
         public void Update(Match match) 
         {
             
@@ -56,10 +64,7 @@ namespace FootballMatches.Data
                 .Include(match => match.MatchPlayers)
                 .FirstOrDefault();
         }
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+
         /**
          * Teams with 
          * - more than 6 players
@@ -70,11 +75,12 @@ namespace FootballMatches.Data
             /**
              * Not efficient solution, but it was best I can find so far.
              */
+            var test = matchDate.Date;
             var homeTeamsWithFixtures = _context.Matches
-                .Where(m => DateTime.Compare(m.Time, matchDate) == 0)
+                .Where(m => DateTime.Compare(m.Time.Date, matchDate.Date) == 0 && !m.Status.AreTeamsAvailable)
                 .Select(m => m.HostTeam);
             var teamsWithFixtures = _context.Matches
-                .Where(m => DateTime.Compare(m.Time, matchDate) == 0)
+                .Where(m => DateTime.Compare(m.Time.Date, matchDate.Date) == 0 && !m.Status.AreTeamsAvailable)
                 .Select(m => m.GuestTeam)
                 .Union(homeTeamsWithFixtures)
                 .OrderBy(t => t.Name)
@@ -99,6 +105,16 @@ namespace FootballMatches.Data
                 .Where(p => p.TeamId == teamId)
                 .ToList();
         }
-
+        public Team Team(int teamId)
+        {
+           return _context.Teams
+                .Include(t => t.Players)
+                .Where(t => t.Id == teamId)
+                .FirstOrDefault();
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }

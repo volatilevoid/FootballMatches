@@ -78,10 +78,10 @@ namespace FootballMatches
 
 
             // Seed DB statuses 
-            modelBuilder.Entity<Status>().HasData(new Status() { Id = 1, Name = "Not started", Color = "#959dab", IsMatchChangeable = true });
-            modelBuilder.Entity<Status>().HasData(new Status() { Id = 2, Name = "Finished", Color = "#86db86", IsMatchChangeable = false });
-            modelBuilder.Entity<Status>().HasData(new Status() { Id = 3, Name = "Canceled", Color = "#db5151", IsMatchChangeable = false });
-            modelBuilder.Entity<Status>().HasData(new Status() { Id = 4, Name = "In progress", Color = "#8a8fed", IsMatchChangeable = true });
+            modelBuilder.Entity<Status>().HasData(new Status() { Id = 1, Name = "Not started", Color = "#959dab", IsMatchStateChangeable = true, AreTeamsAvailable = false, Default = true });
+            modelBuilder.Entity<Status>().HasData(new Status() { Id = 2, Name = "Finished", Color = "#86db86", IsMatchStateChangeable = false, AreTeamsAvailable = false, Default = false });
+            modelBuilder.Entity<Status>().HasData(new Status() { Id = 3, Name = "Canceled", Color = "#db5151", IsMatchStateChangeable = false, AreTeamsAvailable = true, Default = false });
+            modelBuilder.Entity<Status>().HasData(new Status() { Id = 4, Name = "In progress", Color = "#8a8fed", IsMatchStateChangeable = true, AreTeamsAvailable = false, Default = false });
 
             // Test
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 1, Name = "AC Milan" });
@@ -93,8 +93,8 @@ namespace FootballMatches
             modelBuilder.Entity<Player>().HasData(new Player() { Id = 2, Name="Igrac 2", TeamId = 1});
             modelBuilder.Entity<Player>().HasData(new Player() { Id = 3, Name="Igrac 3", TeamId = 2});
             modelBuilder.Entity<Player>().HasData(new Player() { Id = 4, Name="Igrac 4", TeamId = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 1, Place = "San Siro", Time = new DateTime(2020, 11, 11), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Time = new DateTime(2020, 11, 11), HostTeamId = 5, GuestTeamId = 4, HomeScore = 1, GuestScore = 3});
+            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 3, Place = "San Siro", Time = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
+            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Time = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HomeScore = 1, GuestScore = 3});
         }
     }
 }

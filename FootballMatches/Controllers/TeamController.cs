@@ -57,7 +57,7 @@ namespace FootballMatches.Controllers
          * Remove player from team
          */
         [HttpPost]
-        public IActionResult RemovePlayer(int id, int teamId)
+        public JsonResult RemovePlayer(int id, int teamId)
         {
             _teamRepository.RemovePlayer(id, teamId);
             _teamRepository.Save();
