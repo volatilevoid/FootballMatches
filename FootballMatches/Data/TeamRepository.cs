@@ -44,11 +44,11 @@ namespace FootballMatches.Data
         /**
          * Load Team with related players
          */
-        public Team Get(int teamId)
+        public Team Get(int id)
         {
             return _context.Teams
-                .Where(team => team.Id == teamId)
                 .Include(team => team.Players)
+                .Where(team => team.Id == id)
                 .FirstOrDefault();
         }
         /**

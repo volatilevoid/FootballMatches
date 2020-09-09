@@ -69,3 +69,18 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+
+/* Cutom styles */
+.team-logo {
+    width: 140px
+}
+.statuses {
+    list-style-type: none;
+}
+.color-swatch {
+    width: 12px;
+    height: 12px;
+    margin-right: 12px;
+    border-radius: 50%
+}

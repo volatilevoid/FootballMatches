@@ -1,0 +1,47 @@
+﻿@model FootballMatches.ViewModels.AllMatchesViewModel
+
+<div class="all-matches-container d-flex flex-column col-xs-12 col-md-10">
+    <div class="d-flex justify-content-between align-content-center">
+        <ul class="statuses">
+            @foreach (var status in Model.Statuses)
+            {
+                <li class="d-flex align-items-center"><div class="color-swatch" style="background-color: @status.Color"></div>@status.Name</li>
+            }
+        </ul>
+        <div class="new-match-button d-inline-flex align-items-center">
+            <a asp-controller="Match" asp-action="New" class="btn btn-primary">Create new match</a>
+        </div>
+    </div>
+    <div class="matches">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th>Host</th>
+                    <th>Guest</th>
+                    <th>Time</th>
+                    <th>Place</th>
+                    <th>Result</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var match in Model.Matches)
+                {
+                    <tr>
+                        <td><div class="color-swatch" style="background-color: @match.Status.Color"></div></td>
+                        <td>@match.HostTeam.Name</td>
+                        <td>@match.GuestTeam.Name</td>
+                        <td>@match.Time</td>
+                        <td>@match.Place</td>
+                        <td>@String.Format("{0} : {1}", match.HomeScore, match.GuestScore)</td>
+                        <td><a class="btn btn-primary" asp-controller="Match" asp-action="Details" asp-route-id="@match.Id">Details</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex">
+
+    </div>
+</div>
