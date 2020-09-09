@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/",
+      "files": [
+        "js/bootstrap-datepicker.min.js",
+        "css/bootstrap-datepicker.css",
+        "css/bootstrap-datepicker.css.map",
+        "css/bootstrap-datepicker.min.css",
+        "css/bootstrap-datepicker.standalone.css",
+        "css/bootstrap-datepicker.standalone.css.map",
+        "css/bootstrap-datepicker.standalone.min.css",
+        "css/bootstrap-datepicker3.css",
+        "css/bootstrap-datepicker3.css.map",
+        "css/bootstrap-datepicker3.min.css",
+        "css/bootstrap-datepicker3.standalone.css",
+        "css/bootstrap-datepicker3.standalone.css.map",
+        "css/bootstrap-datepicker3.standalone.min.css",
+        "js/bootstrap-datepicker.js",
+        "locales/bootstrap-datepicker.rs-latin.min.js"
+      ]
+    }
+  ]
+}

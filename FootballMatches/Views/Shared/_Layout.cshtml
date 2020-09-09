@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FootballMatches</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-datepicker/css/bootstrap-datepicker.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -19,13 +20,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="Index">Team management</a>
+                            <a class="nav-link text-dark" asp-controller="Team" asp-action="Index">Team management</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Matches(TODO)</a>
+                            <a class="nav-link text-dark" asp-controller="Match" asp-action="Index">Matches</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Statistics(TODO)</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Statistics(TODO)</a>
                         </li>
                     </ul>
                 </div>
@@ -40,11 +41,12 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - FootballMatches - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - FootballMatches
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

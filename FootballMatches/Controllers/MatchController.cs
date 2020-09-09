@@ -47,5 +47,10 @@ namespace FootballMatches.Controllers
         {
             return _matchRepository.AvailableTeams(matchDate);
         }
+        [HttpGet]
+        public List<Player> AvailablePlayers(int teamId)
+        {
+            return _matchRepository.AvailablePlayers(teamId);
+        }
     }
 }

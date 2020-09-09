@@ -16,6 +16,7 @@ namespace FootballMatches.Data
         void Update(Match match);
         void Save();
         public List<Team> AvailableTeams(DateTime matchDate);
+        public List<Player> AvailablePlayers(int teamId);
     }
     public class MatchRepository : IMatchRepository
     {
@@ -82,14 +83,22 @@ namespace FootballMatches.Data
             List<Team> availableTeams = new List<Team>();
             foreach(Team team in allTeams)
             {
-                if (!teamsWithFixtures.Contains(team) && team.Players.Count > 5)
+                //if (!teamsWithFixtures.Contains(team) && team.Players != null && team.Players.Count > 5)
+                // DEV condition
+                if (!teamsWithFixtures.Contains(team))
                 {
                     availableTeams.Add(team);
                 }
             }
-
             return availableTeams;
                 
         }
+        public List<Player> AvailablePlayers(int teamId)
+        {
+            return _context.Players
+                .Where(p => p.TeamId == teamId)
+                .ToList();
+        }
+
     }
 }

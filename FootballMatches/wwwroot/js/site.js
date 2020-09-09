@@ -4,8 +4,8 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
-
-    // Asdd new team
+    // ------------- Team ------------- //
+    // Add new team
     // Submit 
     $("#add-team-confirm").on("click", function () {
         $("#add-team-form").submit();
@@ -15,8 +15,6 @@ $(document).ready(function () {
         $("#add-team-name").val("");
         $("#add-team-description").val("");
     });
-
-
     // Remove player from team - confirm modal
     $(".remove-player").on("click", function () {
         console.log(this);
@@ -49,4 +47,43 @@ $(document).ready(function () {
     $("#add-player-cancel").on("click", function () {
         $("#playerName").val("");
     });
+
+    // ------------- Match ------------- //
+
+    // New match
+
+    function getCurrentDate() {
+        let today = new Date();
+        return (today.getMonth() + 1) + "/" + today.getDate() + "/" + today.getFullYear();
+    }
+
+    // Datepicker
+    $("#selected-date").datepicker({
+        startDate: getCurrentDate()
+    });
+    // Team picker
+    $("#host-team").on("change", function () {
+        let teamId = $(this).val();
+        updateAvailableTeams("guest", teamId);
+        $.ajax({
+            type: "GET",
+            url: "/Match/AvailablePlayers",
+            data: {"teamID": teamId},
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+            }
+        });
+        //console.log(teamId);
+    });
+    // Team can't play against itself
+    // selector = host || guest
+    function updateAvailableTeams(selector, disabledTeamID) {
+        $("select#" + selector + "-team option." + selector).prop("disabled", false);
+        $("select#"+ selector +"-team option."+ selector +"-" + disabledTeamID).prop("disabled", true);
+    }
+
+    function setPlayers(playersSelector, players) {
+
+    }
 });

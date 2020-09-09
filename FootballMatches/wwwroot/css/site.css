@@ -84,3 +84,10 @@ body {
     margin-right: 12px;
     border-radius: 50%
 }
+
+.new-match {
+    min-height: 500px;
+}
+.match-players {
+    border: 1px solid #ced4da;
+}
