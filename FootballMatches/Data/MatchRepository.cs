@@ -87,9 +87,7 @@ namespace FootballMatches.Data
         }
 
         /**
-         * Teams with 
-         * - more than 6 players
-         * - no other fixtures on matchDate
+         * Teams with no other fixtures on matchDate
          */
         public List<Team> AvailableTeams(DateTime matchDate)
         {
@@ -110,7 +108,7 @@ namespace FootballMatches.Data
             List<Team> availableTeams = new List<Team>();
             foreach(Team team in allTeams)
             {
-                if (!teamsWithFixtures.Contains(team) && team.Players != null && team.Players.Count > 5)
+                if (!teamsWithFixtures.Contains(team))
                 {
                     availableTeams.Add(team);
                 }
@@ -124,15 +122,6 @@ namespace FootballMatches.Data
                 .Where(p => p.TeamId == teamId)
                 .ToList();
         }
-
-        //public MatchPlayer GetMatchPlayer(int matchId, int playerId)
-        //{
-        //    return _context.MatchPlayers
-        //        .Include(mp => mp.Goals)
-        //        .Where(mp => mp.MatchId == matchId && mp.PlayerId == playerId)
-        //        .FirstOrDefault();
-        //}
-
         public void AddMatchPlayer(MatchPlayer playerOnMatch)
         {
             _context.MatchPlayers.Add(playerOnMatch);

@@ -23,8 +23,7 @@ namespace FootballMatches.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Match");
-            //return RedirectToAction("Index", "Team");
+            return RedirectToAction("Index", "Team");
         }
 
         public string Test()

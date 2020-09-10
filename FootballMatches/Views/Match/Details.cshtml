@@ -1,22 +1,23 @@
-﻿@model Match
+﻿@model FootballMatches.ViewModels.MatchDetailsViewModel
 
 <div class="d-flex flex-column jusify-content-around">
+    <div class="d-flex align-self-center align-items-center"><div class="color-swatch" style="background-color: @Model.Status.Color"></div>@Model.Status.Name</div>
     <a asp-controller="Match" asp-action="Index" class="d-flex align-self-start btn btn-secondary">Back</a>
     <div class="d-flex match-details justify-content-between">
         <div class="d-flex flex-column justify-content-around">
             <div class="d-flex">
-                <h2>@Model.HostTeam.Name</h2>
+                <h2>@Model.HostTeamName</h2>
                 @if (Model.Status.IsMatchStateChangeable && !Model.Status.Default)
                 {
                     <button class="btn btn-primary add-goal ml-4" data-teamid="Model.Id" data-id="player.Id" data-toggle="modal" data-target="#addHostGoalModal">Add Goal</button>
                 }
             </div>
             <ol>
-                @foreach (var hostPlayer in Model.HostTeam.Players)
+                @foreach (var hostPlayer in Model.HostSquad)
                 {
                     <li>
                         @hostPlayer.Name @if (hostPlayer.MatchPlayers.Count != 0)
-                        {<span>( @hostPlayer.MatchPlayers[0].Goals.Count() )</span>}
+                        {<span>( @hostPlayer.MatchPlayers[hostPlayer.MatchPlayers.Count - 1].Goals.Count() )</span>}
                     </li>
                 }
             </ol>
@@ -28,18 +29,18 @@
 
         <div class="d-flex flex-column justify-content-around">
             <div class="d-flex">
-                <h2>@Model.GuestTeam.Name</h2>
+                <h2>@Model.GuestTeamName</h2>
                 @if (Model.Status.IsMatchStateChangeable && !Model.Status.Default)
                 {
                     <button class="btn btn-primary add-goal ml-4" data-teamid="Model.Id" data-id="player.Id" data-toggle="modal" data-target="#addGuestGoalModal">Add Goal</button>
                 }
             </div>
             <ol>
-                @foreach (var hostPlayer in Model.GuestTeam.Players)
+                @foreach (var guestPlayer in Model.GuestSquad)
                 {
                     <li>
-                        @hostPlayer.Name @if (hostPlayer.MatchPlayers.Count != 0)
-                        {<span>( @hostPlayer.MatchPlayers[0].Goals.Count() )</span>}
+                        @guestPlayer.Name @if (guestPlayer.MatchPlayers.Count != 0)
+                        {<span>( @guestPlayer.MatchPlayers[guestPlayer.MatchPlayers.Count - 1].Goals.Count() )</span>}
                     </li>
                 }
             </ol>
@@ -62,15 +63,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <p class="mb-0 modal-title">Add @Model.HostTeam.Name goal</p>
+                <p class="mb-0 modal-title">Add @Model.HostTeamName goal</p>
             </div>
             <div class="modal-body">
                 <form id="host-goal-form" method="post" asp-controller="Match" asp-action="UpdateScore">
                     <input type="hidden" name="matchId" value="@Model.Id">
                     <input type="hidden" name="teamId" value="@Model.HostTeamId">
-                    <select name="playerId" class="custom-select">
+                    <select class="custom-select" name="playerId">
                         <option selected>Select goal scorer</option>
-                        @foreach (var hostPlayer in Model.HostTeam.Players)
+                        @foreach (var hostPlayer in Model.HostSquad)
                         {
                             <option value="@hostPlayer.Id">@hostPlayer.Name</option>
                         }
@@ -89,15 +90,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <p class="mb-0 modal-title">Add @Model.GuestTeam.Name goal</p>
+                <p class="mb-0 modal-title">Add @Model.GuestTeamName goal</p>
             </div>
             <div class="modal-body">
                 <form id="guest-goal-form" method="post" asp-controller="Match" asp-action="UpdateScore">
                     <input type="hidden" name="matchId" value="@Model.Id">
                     <input type="hidden" name="teamId" value="@Model.GuestTeamId">
-                    <select id="add-guest-goal" class="custom-select">
+                    <select id="add-guest-goal" class="custom-select" name="playerId">
                         <option selected>Select goal scorer</option>
-                        @foreach (var guestPlayer in Model.GuestTeam.Players)
+                        @foreach (var guestPlayer in Model.GuestSquad)
                         {
                             <option value="@guestPlayer.Id">@guestPlayer.Name</option>
                         }

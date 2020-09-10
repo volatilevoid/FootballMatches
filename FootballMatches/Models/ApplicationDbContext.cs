@@ -90,33 +90,33 @@ namespace FootballMatches
             modelBuilder.Entity<StatusAction>().HasData( new StatusAction() { Id = 3, Name = "FInish", StatusId = 4, NewStatusId = 2} );
 
             // Test
-            modelBuilder.Entity<Team>().HasData(new Team() { Id = 1, Name = "AC Milan" });
-            modelBuilder.Entity<Team>().HasData(new Team() { Id = 2, Name = "FK Pobjeda Trijesnica" });
-            modelBuilder.Entity<Team>().HasData(new Team() { Id = 3, Name = "FK Proleter Dvorovi" });
-            modelBuilder.Entity<Team>().HasData(new Team() { Id = 4, Name = "FK Bacac Golo Brdo" });
-            modelBuilder.Entity<Team>().HasData(new Team() { Id = 5, Name = "FC Real Madrid" });
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =1 ,Name="Igrac 11", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =2 ,Name="Igrac 12", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =3 ,Name="Igrac 13", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =4 ,Name="Igrac 14", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =5 ,Name="Igrac 15", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =6 ,Name="Igrac 16", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =7 ,Name="Igrac 21", TeamId = 2});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =8 ,Name="Igrac 22", TeamId = 2});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =9 ,Name="Igrac 23", TeamId = 2});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =10, Name="Igrac 24", TeamId = 2});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =11, Name="Igrac 25", TeamId = 2});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id =12, Name="Igrac 26", TeamId = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 1, Place = "San Siro", Date = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Date = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HostScore = 1, GuestScore = 3});
-            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 1, MatchId = 1, PlayerId = 1 });
-            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 2, MatchId = 1, PlayerId = 1 });
-            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 3, MatchId = 1, PlayerId = 1 });
-            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 4, MatchId = 1, PlayerId = 2 });
-            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 5, MatchId = 1, PlayerId = 12 });
-            modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 1 });
-            modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 2 });
-            modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 12 });
+            //modelBuilder.Entity<Team>().HasData(new Team() { Id = 1, Name = "AC Milan" });
+            //modelBuilder.Entity<Team>().HasData(new Team() { Id = 2, Name = "FK Pobjeda Trijesnica" });
+            //modelBuilder.Entity<Team>().HasData(new Team() { Id = 3, Name = "FK Proleter Dvorovi" });
+            //modelBuilder.Entity<Team>().HasData(new Team() { Id = 4, Name = "FK Bacac Golo Brdo" });
+            //modelBuilder.Entity<Team>().HasData(new Team() { Id = 5, Name = "FC Real Madrid" });
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =1 ,Name="Igrac 11", TeamId = 1});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =2 ,Name="Igrac 12", TeamId = 1});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =3 ,Name="Igrac 13", TeamId = 1});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =4 ,Name="Igrac 14", TeamId = 1});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =5 ,Name="Igrac 15", TeamId = 1});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =6 ,Name="Igrac 16", TeamId = 1});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =7 ,Name="Igrac 21", TeamId = 2});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =8 ,Name="Igrac 22", TeamId = 2});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =9 ,Name="Igrac 23", TeamId = 2});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =10, Name="Igrac 24", TeamId = 2});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =11, Name="Igrac 25", TeamId = 2});
+            //modelBuilder.Entity<Player>().HasData(new Player() { Id =12, Name="Igrac 26", TeamId = 2});
+            //modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 1, Place = "San Siro", Date = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
+            //modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Date = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HostScore = 1, GuestScore = 3});
+            //modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 1, MatchId = 1, PlayerId = 1 });
+            //modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 2, MatchId = 1, PlayerId = 1 });
+            //modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 3, MatchId = 1, PlayerId = 1 });
+            //modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 4, MatchId = 1, PlayerId = 2 });
+            //modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 5, MatchId = 1, PlayerId = 12 });
+            //modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 1 });
+            //modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 2 });
+            //modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 12 });
 
         }
     }

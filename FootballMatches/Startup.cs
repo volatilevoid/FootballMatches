@@ -47,6 +47,7 @@ namespace FootballMatches
             // Register repositories in service container
             services.AddTransient<ITeamRepository, TeamRepository>();
             services.AddTransient<IMatchRepository, MatchRepository>();
+            services.AddTransient<IStatisticsRepository, StatisticsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -32,7 +32,39 @@ namespace FootballMatches.Controllers
          */
         public IActionResult Details(int id)
         {
-            Match model = _matchRepository.Get(id);
+            Match matchDetails = _matchRepository.Get(id);
+
+            List<Player> hostSquad = new List<Player>();
+            List<Player> guestSquad = new List<Player>();
+
+            foreach(MatchPlayer matchPlayer in matchDetails.MatchPlayers)
+            {
+                if(matchPlayer.Player.TeamId == matchDetails.HostTeamId)
+                {
+                    hostSquad.Add(matchPlayer.Player);
+                }
+                else if(matchPlayer.Player.TeamId == matchDetails.GuestTeamId)
+                {
+                    guestSquad.Add(matchPlayer.Player);
+                }
+            }
+
+            MatchDetailsViewModel model = new MatchDetailsViewModel()
+            {
+                Id = matchDetails.Id,
+                HostTeamId = matchDetails.HostTeamId,
+                HostTeamName = matchDetails.HostTeam.Name,
+                GuestTeamId = matchDetails.GuestTeamId,
+                GuestTeamName = matchDetails.GuestTeam.Name,
+                HostScore = matchDetails.HostScore,
+                GuestScore = matchDetails.GuestScore,
+                Place = matchDetails.Place,
+                Date = matchDetails.Date,
+                Status = matchDetails.Status,
+                HostSquad = hostSquad,
+                GuestSquad = guestSquad
+            };
+
 
             return View(model);
         }
@@ -126,15 +158,33 @@ namespace FootballMatches.Controllers
          */
         public IActionResult UpdateStatus(int matchId, int statusId)
         {
+            Status cancelStatus = _matchRepository.Statuses().Find(s => s.AreTeamsAvailable == true);
+            
             Match matchToUpdate = _matchRepository.Get(matchId);
             matchToUpdate.StatusId = statusId;
+            if(statusId == cancelStatus.Id)
+            {
+                // Match canceled 
+                // -> players made no appearance
+                // -> Teams can play some other match on that day
+                matchToUpdate.MatchPlayers = new List<MatchPlayer>();
+                _matchRepository.Update(matchToUpdate);
+                _matchRepository.Save();
+                return RedirectToAction("Index", "Match");
+            }
             _matchRepository.Update(matchToUpdate);
             _matchRepository.Save();
+
             return RedirectToAction("Details", new { id = matchId});
         }
         [HttpPost]
         public IActionResult UpdateScore(int matchId, int teamId, int playerId)
         {
+            // If playerId == 0 fix!!!!
+            if(playerId == 0)
+            {
+                return RedirectToAction("Details", new { id = matchId });
+            }
             Match match = _matchRepository.Get(matchId);
             Goal newGoal = new Goal()
             {

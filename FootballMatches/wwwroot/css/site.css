@@ -85,7 +85,7 @@ body {
     border-radius: 50%
 }
 
-.new-match, .match-details {
+.new-match, .match-details, .statistics {
     min-height: 500px;
 }
 .match-players {

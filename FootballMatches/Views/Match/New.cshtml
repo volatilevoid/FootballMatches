@@ -7,19 +7,11 @@
             <div class="form-group">
                 <label for="host-team" class="text-center">Host</label>
                 <select id="host-team" name="host-team" class="custom-select form-control mb-4">
-                    @if (Model.Teams.Count() > 1)
+                    <option selected value="">Select Host</option>
+                    @foreach (var team in Model.Teams)
                     {
-                        <option selected value="">Select Host</option>
-                        @foreach (var team in Model.Teams)
-                        {
-                            <option class="host host-@team.Id" value="@team.Id">@team.Name</option>
-                        }
+                        <option class="host host-@team.Id" value="@team.Id">@team.Name</option>
                     }
-                    else
-                    {
-                        <option selected>Need 2 teams with min 6 players</option>
-                    }
-
                 </select>
                 <div id="host-invalid" class="invisible custom-validator">Select Host team!</div>
             </div>
@@ -49,19 +41,11 @@
             <div class="form-group">
                 <label for="guest-team" class="text-center">Guest</label>
                 <select id="guest-team" name="guest-team" class="custom-select form-control mb-4">
-                    @if (Model.Teams.Count() > 1)
+                    <option selected value="">Select Guest</option>
+                    @foreach (var team in Model.Teams)
                     {
-                        <option selected value="">Select Guest</option>
-                        @foreach (var team in Model.Teams)
-                        {
-                            <option class="guest guest-@team.Id" value="@team.Id">@team.Name</option>
-                        }
+                        <option class="guest guest-@team.Id" value="@team.Id">@team.Name</option>
                     }
-                    else
-                    {
-                        <option selected>Need 2 teams with min 6 players</option>
-                    }
-
                 </select>
                 <div id="guest-invalid" class="invisible custom-validator">Choose Guest team!</div>
             </div>
