@@ -12,13 +12,16 @@ namespace FootballMatches.Data
         List<Match> Matches();
         //void Add(Match match);
         Match Get(int id);
-        List<Status> Statuses();
-        Status DefaultStatus();
-        void Update(Match match);
-        void Save();
-        public List<Team> AvailableTeams(DateTime matchDate);
         public Team Team(int teamId);
+        public void Create(Match match);
+        public List<Status> Statuses();
+        public Status DefaultStatus();
+        public void AddMatchPlayer(MatchPlayer playerOnMatch);
+        void Update(Match match);
+        public List<Team> AvailableTeams(DateTime matchDate);
         public List<Player> AvailablePlayers(int teamId);
+        public List<Player> Players(int[] playerIDs);
+        void Save();
     }
     public class MatchRepository : IMatchRepository
     {
@@ -49,6 +52,11 @@ namespace FootballMatches.Data
                 .Where(s => s.Default == true)
                 .FirstOrDefault();
         }
+        public void Create(Match match)
+        {
+            _context.Matches.Add(match);
+        }
+
         public void Update(Match match) 
         {
             
@@ -60,8 +68,9 @@ namespace FootballMatches.Data
                 .Where(match => match.Id == id)
                 .Include(match => match.Status)
                 .Include(match => match.HostTeam)
+                    .ThenInclude(ht => ht.Players)
                 .Include(match => match.GuestTeam)
-                .Include(match => match.MatchPlayers)
+                    .ThenInclude(gt => gt.Players)
                 .FirstOrDefault();
         }
 
@@ -77,10 +86,10 @@ namespace FootballMatches.Data
              */
             var test = matchDate.Date;
             var homeTeamsWithFixtures = _context.Matches
-                .Where(m => DateTime.Compare(m.Time.Date, matchDate.Date) == 0 && !m.Status.AreTeamsAvailable)
+                .Where(m => DateTime.Compare(m.Date.Date, matchDate.Date) == 0 && !m.Status.AreTeamsAvailable)
                 .Select(m => m.HostTeam);
             var teamsWithFixtures = _context.Matches
-                .Where(m => DateTime.Compare(m.Time.Date, matchDate.Date) == 0 && !m.Status.AreTeamsAvailable)
+                .Where(m => DateTime.Compare(m.Date.Date, matchDate.Date) == 0 && !m.Status.AreTeamsAvailable)
                 .Select(m => m.GuestTeam)
                 .Union(homeTeamsWithFixtures)
                 .OrderBy(t => t.Name)
@@ -105,10 +114,19 @@ namespace FootballMatches.Data
                 .Where(p => p.TeamId == teamId)
                 .ToList();
         }
+        public List<Player> Players(int[] playerIDs)
+        {
+            return _context.Players
+                .Where(p => playerIDs.Contains(p.Id))
+                .ToList();
+        }
+        public void AddMatchPlayer(MatchPlayer playerOnMatch)
+        {
+            _context.MatchPlayers.Add(playerOnMatch);
+        }
         public Team Team(int teamId)
         {
            return _context.Teams
-                .Include(t => t.Players)
                 .Where(t => t.Id == teamId)
                 .FirstOrDefault();
         }

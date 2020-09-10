@@ -1,9 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     // ------------- Team ------------- //
     // Add new team
     // Submit 
@@ -81,7 +76,7 @@ $(document).ready(function () {
         });
     });
 
-    // Team can't play against itself
+    // Team can't play against itself -> update other select input
     // selector = host || guest
     function updateAvailableTeams(selector, disabledTeamID) {
         $("select#" + selector + "-team option." + selector).prop("disabled", false);
@@ -122,12 +117,11 @@ $(document).ready(function () {
         $("." + hostOrGuest + "-players").html(content);
     }
     
-    // Team picker
+    // Team picker -> get team players
     // Host
     $("#host-team").on("change", function () {
         let teamId = $(this).val();
         updateAvailableTeams("guest", teamId);
-        //clearPlayers("host");
         $.ajax({
             type: "GET",
             url: "/Match/AvailablePlayers",
@@ -136,7 +130,6 @@ $(document).ready(function () {
             success: function (response) {
                 let teamId = $("#host-team").val();
                 setPlayers(response, teamId, "host");
-                console.log($("#host-team").val());
             }
         });
     });
@@ -144,7 +137,6 @@ $(document).ready(function () {
     $("#guest-team").on("change", function () {
         let teamId = $(this).val();
         updateAvailableTeams("host", teamId);
-        //clearPlayers("guest");
         $.ajax({
             type: "GET",
             url: "/Match/AvailablePlayers",
@@ -162,6 +154,7 @@ $(document).ready(function () {
         let minPlayersRequred = 6;
         let playerIdPrefix = "player-team-";
         let allPlayers = [];
+        // Create object to store all "new match" form data
         let formatedData = {
             isValid: {
                 hostId: true,
@@ -172,8 +165,8 @@ $(document).ready(function () {
                 guestPlayers: true,
             },
             content: {
-                hostPlayers: [],
-                guestPlayers: []
+                hostPlayerIDs: [],
+                guestPlayerIDs: []
             }
         };
 
@@ -214,73 +207,66 @@ $(document).ready(function () {
         // Separate host and guest players
         allPlayers.forEach(player => {
             if (player.name.replace(playerIdPrefix, "") === formatedData.content.hostId) {
-                formatedData.content.hostPlayers.push(player.value);
+                formatedData.content.hostPlayerIDs.push(player.value);
             }
             else if (player.name.replace(playerIdPrefix, "") === formatedData.content.guestId) {
-                formatedData.content.guestPlayers.push(player.value)
+                formatedData.content.guestPlayerIDs.push(player.value)
             }
         });
         // Check if more than min players is selected
-        if (formatedData.content.hostPlayers.length < minPlayersRequred) {
-            formatedData.isValid.hostPlayers = false;
+        if (formatedData.content.hostPlayerIDs.length < minPlayersRequred) {
+            formatedData.isValid.hostPlayerIDs = false;
         }
-        if (formatedData.content.guestPlayers.length < minPlayersRequred) {
-            formatedData.isValid.guestPlayers = false;
+        if (formatedData.content.guestPlayerIDs.length < minPlayersRequred) {
+            formatedData.isValid.guestPlayerIDs = false;
         }
         return formatedData;
     }
 
-
-
-    // Global variable for validators
+    // Global variable for "new match", property -> css selector
     var propToIdSelector = {
         "guestId": "#guest-invalid",
-        "guestPlayers": "#guest-team-invalid",
         "hostId": "#host-invalid",
-        "hostPlayers": "#host-team-invalid",
-        "matchPlace": "#place-invalid"
+        "matchPlace": "#place-invalid",
+        "hostPlayerIDs": "#host-team-invalid",
+        "guestPlayerIDs": "#guest-team-invalid"
     };
-
+    // Remove all invalid markers
     function resetAllValidation() {
         for (let validityProperty in propToIdSelector) {
             $(propToIdSelector[validityProperty]).addClass("invisible");
         }
     }
-
     // Validate new match form
     function isNewMatchFormValid(form) {
         let isValid = true;
-
         for (let validityProperty in form.isValid) {
             if (!form.isValid[validityProperty]) {
-                isValid = false;
+                if (isValid) {
+                    isValid = false;
+                }
+                // Show warning
                 $(propToIdSelector[validityProperty]).removeClass("invisible");
             }
         }
         return isValid;
     }
-
     // Submit new match form if valid
     $("#add-match-confirm").on("click", function () {
         let formData = $("#add-match-form").serializeArray();
-        let form = formatFormData(formData);
-        //$("#add-match-form").addClass("was-validated");
-        let isValid = isNewMatchFormValid(form);
-
-        console.log(form);
-        if (isValid) {
+        if (isNewMatchFormValid(formatFormData(formData))) {
             $.ajax({
                 type: "POST",
                 url: "/Match/Create",
                 data: form.content,
                 dataType: "json",
-                success: function (response) {
-
+                success: function (isMatchCreated) {
+                    if (isMatchCreated === true) {
+                        window.location.href = '/Match';
+                    }
                 }
             });
         }
-
-        //$("#add-match-form").submit();
     });
 
 });

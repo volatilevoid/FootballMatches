@@ -18,6 +18,7 @@ namespace FootballMatches
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<MatchPlayer> MatchPlayers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,11 +54,7 @@ namespace FootballMatches
             modelBuilder.Entity<Match>()
                 .Property(m => m.GuestScore)
                 .HasDefaultValue(0);
-            // Add constraint -> team can not play against itself
-            modelBuilder.Entity<Match>()
-                .HasIndex(m => new { m.HostTeamId, m.GuestTeamId })
-                .IsUnique(true);
-
+            
             // Player - Match -> n:n => join table MatchPlayer
             modelBuilder.Entity<MatchPlayer>()
                 .HasKey(t => new { t.MatchId, t.PlayerId });    // join table composite key
@@ -70,12 +67,11 @@ namespace FootballMatches
                 .WithMany(p => p.MatchPlayers)
                 .HasForeignKey(mp => mp.PlayerId);
 
-            //MatchPlayer - Goal-> 1:n with composite FK
+            // MatchPlayer - Goal-> 1:n with composite FK
             modelBuilder.Entity<Goal>()
                 .HasOne(g => g.MatchPlayer)
                 .WithMany(mp => mp.Goals)
                 .HasForeignKey(g => new { g.MatchId, g.PlayerId });
-
 
             // Seed DB statuses 
             modelBuilder.Entity<Status>().HasData(new Status() { Id = 1, Name = "Not started", Color = "#959dab", IsMatchStateChangeable = true, AreTeamsAvailable = false, Default = true });
@@ -89,12 +85,20 @@ namespace FootballMatches
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 3, Name = "FK Proleter Dvorovi" });
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 4, Name = "FK Bacac Golo Brdo" });
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 5, Name = "FC Real Madrid" });
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 1, Name="Igrac 1", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 2, Name="Igrac 2", TeamId = 1});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 3, Name="Igrac 3", TeamId = 2});
-            modelBuilder.Entity<Player>().HasData(new Player() { Id = 4, Name="Igrac 4", TeamId = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 3, Place = "San Siro", Time = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Time = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HomeScore = 1, GuestScore = 3});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =1 ,Name="Igrac 11", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =2 ,Name="Igrac 12", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =3 ,Name="Igrac 13", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =4 ,Name="Igrac 14", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =5 ,Name="Igrac 15", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =6 ,Name="Igrac 16", TeamId = 1});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =7 ,Name="Igrac 21", TeamId = 2});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =8 ,Name="Igrac 22", TeamId = 2});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =9 ,Name="Igrac 23", TeamId = 2});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =10, Name="Igrac 24", TeamId = 2});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =11, Name="Igrac 25", TeamId = 2});
+            modelBuilder.Entity<Player>().HasData(new Player() { Id =12, Name="Igrac 26", TeamId = 2});
+            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 3, Place = "San Siro", Date = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
+            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Date = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HomeScore = 1, GuestScore = 3});
         }
     }
 }

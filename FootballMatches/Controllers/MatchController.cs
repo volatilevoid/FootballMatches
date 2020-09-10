@@ -29,7 +29,7 @@ namespace FootballMatches.Controllers
         }
         public IActionResult Details(int id)
         {
-
+            Match model = _matchRepository.Get(id);
             return View();
         }
         public IActionResult New(DateTime matchDate)
@@ -43,15 +43,57 @@ namespace FootballMatches.Controllers
             return View(viewModel);
         }
         [HttpPost]
-        public JsonResult Create(int hostId, int guestId, string matchDate, string matchPlace, int[] hostPlayers, int[] guestPlayers)
+        public IActionResult Create(int hostId, int guestId, string matchDate, string matchPlace, int[] hostPlayerIDs, int[] guestPlayerIDs)
         {
-            // TODO: backend validation + store new match
-            Team hostTeam = _matchRepository.Team(hostId);
-            Team guestTeam = _matchRepository.Team(guestId);
+            int minPlayers = 6;
             Status defaultStatus = _matchRepository.DefaultStatus();
+            // Validate date
+            DateTime date;
+            if ( !DateTime.TryParse(matchDate, out date) || DateTime.Compare(DateTime.Today.Date, date.Date) > 0)
+            {
+                return Json(false);
+            }
+            // Validate other fields
+            if (hostId == guestId || hostPlayerIDs.Count() < minPlayers || guestPlayerIDs.Count() < minPlayers || matchPlace== null || matchPlace.Length == 0)
+            {
+                return Json(false);
+            }
+            // Create new match
+            Match newMatch = new Match()
+            {
+                HostTeamId = hostId,
+                GuestTeamId = guestId,
+                HomeScore = 0,
+                GuestScore = 0,
+                Date = date,
+                Place = matchPlace,
+                StatusId = defaultStatus.Id
+            };
+            _matchRepository.Create(newMatch);
+            _matchRepository.Save();
+            // Add host players
+            foreach (int hostPlayerId in hostPlayerIDs)
+            {
+                MatchPlayer playerOnMatch = new MatchPlayer()
+                {
+                    MatchId = newMatch.Id,
+                    PlayerId = hostPlayerId
+                };
+                _matchRepository.AddMatchPlayer(playerOnMatch);
+            }
+            // Add guest players
+            foreach (int guestPlayerId in guestPlayerIDs)
+            {
+                MatchPlayer playerOnMatch = new MatchPlayer()
+                {
+                    MatchId = newMatch.Id,
+                    PlayerId = guestPlayerId
+                };
+                _matchRepository.AddMatchPlayer(playerOnMatch);
+            }
+            _matchRepository.Save();
 
-
-            return Json(new { matchCreated = true });
+            return Json(true);
         }
         /**
          * Get teams that don't have match on matchDate

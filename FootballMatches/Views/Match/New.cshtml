@@ -6,7 +6,7 @@
 
         <div class="match-team d-flex flex-column justify-content-between">
             <div class="form-group">
-                <label for="host-team" class="text-center"><h2 class="h3">Host</h2></label>
+                <label for="host-team" class="text-center">Host</label>
                 <select id="host-team" name="host-team" class="custom-select form-control mb-4">
                     <option selected value="">Select Host</option>
                     @foreach (var team in Model.availableTeams)
@@ -42,7 +42,7 @@
         <div class="match-team d-flex flex-column  justify-content-between">
 
             <div class="form-group">
-                <label for="guest-team" class="text-center"><h2 class="h3">Host</h2></label>
+                <label for="guest-team" class="text-center">Guest</label>
                 <select id="guest-team" name="guest-team" class="custom-select form-control mb-4">
                     <option selected value="">Select Guest</option>
                     @foreach (var team in Model.availableTeams)

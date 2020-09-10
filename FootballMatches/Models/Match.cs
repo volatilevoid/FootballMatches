@@ -12,7 +12,7 @@ namespace FootballMatches.Models
     {
         // PK
         public int Id { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime Date { get; set; }
         public string Place { get; set; }
         public int HomeScore { get; set; }
         public int GuestScore { get; set; }
