@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    // ------------- Team ------------- //
+    // -------------------------- Team -------------------------- //
     // Add new team
     // Submit 
     $("#add-team-confirm").on("click", function () {
@@ -43,11 +43,21 @@
         $("#playerName").val("");
     });
 
+    // Check if new player name is not empty
+    $("#new-player-input").on("input", function () {
+        if ($(this).val().length !== 0) {
+            $("#add-player-confirm").prop("disabled", false)
+        }
+        else {
+            $("#add-player-confirm").prop("disabled", false)
+        }
+    });
 
-    // ------------- Match ------------- //
+
+    // -------------------------- Match -------------------------- //
 
 
-    // New match
+    // ---------------- New ---------------- //
     function getCurrentDate() {
         let today = new Date();
         return (today.getMonth() + 1) + "/" + today.getDate() + "/" + today.getFullYear();
@@ -163,6 +173,7 @@
                 matchDate: true,
                 hostPlayers: true,
                 guestPlayers: true,
+                equalNumOfPlayers: true
             },
             content: {
                 hostPlayerIDs: [],
@@ -220,6 +231,10 @@
         if (formatedData.content.guestPlayerIDs.length < minPlayersRequred) {
             formatedData.isValid.guestPlayerIDs = false;
         }
+        // Check of equal number of players are selected
+        if (formatedData.content.hostPlayerIDs.length !== formatedData.content.guestPlayerIDs.length) {
+            formatedData.isValid.equalNumOfPlayers = false;
+        }
         return formatedData;
     }
 
@@ -229,7 +244,8 @@
         "hostId": "#host-invalid",
         "matchPlace": "#place-invalid",
         "hostPlayerIDs": "#host-team-invalid",
-        "guestPlayerIDs": "#guest-team-invalid"
+        "guestPlayerIDs": "#guest-team-invalid",
+        "equalNumOfPlayers": "#equal-players-invalid"
     };
     // Remove all invalid markers
     function resetAllValidation() {
@@ -254,7 +270,8 @@
     // Submit new match form if valid
     $("#add-match-confirm").on("click", function () {
         let formData = $("#add-match-form").serializeArray();
-        if (isNewMatchFormValid(formatFormData(formData))) {
+        let form = formatFormData(formData);
+        if (isNewMatchFormValid(form)) {
             $.ajax({
                 type: "POST",
                 url: "/Match/Create",
@@ -269,4 +286,14 @@
         }
     });
 
+});
+
+// ---------------- Details ---------------- //
+// Confirm host goal form
+$("#host-goal-confirm").on("click", function () {
+    $("#host-goal-form").submit();
+});
+// Confirm guest goal form
+$("#guest-goal-confirm").on("click", function () {
+    $("#guest-goal-form").submit();
 });

@@ -9,18 +9,25 @@ namespace FootballMatches.Data
 {
     public interface IMatchRepository
     {
+        // Get all matches
         List<Match> Matches();
-        //void Add(Match match);
+        // Add new Match
+        void Add(Match match);
+        // Get match details
         Match Get(int id);
-        public Team Team(int teamId);
-        public void Create(Match match);
+        // Get all match statuses
         public List<Status> Statuses();
+        // Status on match creation
         public Status DefaultStatus();
+        // Add selected team players to the match
         public void AddMatchPlayer(MatchPlayer playerOnMatch);
+        // Update match state
         void Update(Match match);
+        // Get all available teams for provided match date
         public List<Team> AvailableTeams(DateTime matchDate);
+        // Get all team players available for match
         public List<Player> AvailablePlayers(int teamId);
-        public List<Player> Players(int[] playerIDs);
+        //public MatchPlayer GetMatchPlayer(int matchId, int playerId);
         void Save();
     }
     public class MatchRepository : IMatchRepository
@@ -40,10 +47,10 @@ namespace FootballMatches.Data
                 .Include(match => match.MatchPlayers)
                 .ToList();
         }
-        public void Add(Match match) { }
         public List<Status> Statuses() 
         {
             return _context.Statuses
+                .Include(s => s.PermittedActions)
                 .ToList();
         }
         public Status DefaultStatus()
@@ -52,14 +59,14 @@ namespace FootballMatches.Data
                 .Where(s => s.Default == true)
                 .FirstOrDefault();
         }
-        public void Create(Match match)
+        public void Add(Match match)
         {
             _context.Matches.Add(match);
         }
 
         public void Update(Match match) 
         {
-            
+            _context.Update(match);
         }
 
         public Match Get(int id)
@@ -67,10 +74,15 @@ namespace FootballMatches.Data
             return _context.Matches
                 .Where(match => match.Id == id)
                 .Include(match => match.Status)
+                    .ThenInclude(s => s.PermittedActions)
                 .Include(match => match.HostTeam)
                     .ThenInclude(ht => ht.Players)
+                        .ThenInclude(p => p.MatchPlayers)
+                            .ThenInclude(mp => mp.Goals)
                 .Include(match => match.GuestTeam)
                     .ThenInclude(gt => gt.Players)
+                        .ThenInclude(p => p.MatchPlayers)
+                            .ThenInclude(mp => mp.Goals)
                 .FirstOrDefault();
         }
 
@@ -98,9 +110,7 @@ namespace FootballMatches.Data
             List<Team> availableTeams = new List<Team>();
             foreach(Team team in allTeams)
             {
-                //if (!teamsWithFixtures.Contains(team) && team.Players != null && team.Players.Count > 5)
-                // DEV condition
-                if (!teamsWithFixtures.Contains(team))
+                if (!teamsWithFixtures.Contains(team) && team.Players != null && team.Players.Count > 5)
                 {
                     availableTeams.Add(team);
                 }
@@ -114,21 +124,18 @@ namespace FootballMatches.Data
                 .Where(p => p.TeamId == teamId)
                 .ToList();
         }
-        public List<Player> Players(int[] playerIDs)
-        {
-            return _context.Players
-                .Where(p => playerIDs.Contains(p.Id))
-                .ToList();
-        }
+
+        //public MatchPlayer GetMatchPlayer(int matchId, int playerId)
+        //{
+        //    return _context.MatchPlayers
+        //        .Include(mp => mp.Goals)
+        //        .Where(mp => mp.MatchId == matchId && mp.PlayerId == playerId)
+        //        .FirstOrDefault();
+        //}
+
         public void AddMatchPlayer(MatchPlayer playerOnMatch)
         {
             _context.MatchPlayers.Add(playerOnMatch);
-        }
-        public Team Team(int teamId)
-        {
-           return _context.Teams
-                .Where(t => t.Id == teamId)
-                .FirstOrDefault();
         }
         public void Save()
         {

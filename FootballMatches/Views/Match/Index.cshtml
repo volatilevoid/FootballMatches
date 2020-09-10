@@ -34,7 +34,7 @@
                         <td>@match.GuestTeam.Name</td>
                         <td>@String.Format("{0}/{1}/{2}", match.Date.Day, match.Date.Month, match.Date.Year)</td>
                         <td>@match.Place</td>
-                        <td>@String.Format("{0} : {1}", match.HomeScore, match.GuestScore)</td>
+                        <td>@String.Format("{0} : {1}", match.HostScore, match.GuestScore)</td>
                         <td><a class="btn btn-primary" asp-controller="Match" asp-action="Details" asp-route-id="@match.Id">Details</a></td>
                     </tr>
                 }
@@ -42,6 +42,6 @@
         </table>
     </div>
     <div class="d-flex">
-
+        <!-- TODO: pagination -->
     </div>
 </div>

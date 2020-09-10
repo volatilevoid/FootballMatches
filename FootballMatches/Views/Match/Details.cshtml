@@ -1,0 +1,113 @@
+﻿@model Match
+
+<div class="d-flex flex-column jusify-content-around">
+    <a asp-controller="Match" asp-action="Index" class="d-flex align-self-start btn btn-secondary">Back</a>
+    <div class="d-flex match-details justify-content-between">
+        <div class="d-flex flex-column justify-content-around">
+            <div class="d-flex">
+                <h2>@Model.HostTeam.Name</h2>
+                @if (Model.Status.IsMatchStateChangeable && !Model.Status.Default)
+                {
+                    <button class="btn btn-primary add-goal ml-4" data-teamid="Model.Id" data-id="player.Id" data-toggle="modal" data-target="#addHostGoalModal">Add Goal</button>
+                }
+            </div>
+            <ol>
+                @foreach (var hostPlayer in Model.HostTeam.Players)
+                {
+                    <li>
+                        @hostPlayer.Name @if (hostPlayer.MatchPlayers.Count != 0)
+                        {<span>( @hostPlayer.MatchPlayers[0].Goals.Count() )</span>}
+                    </li>
+                }
+            </ol>
+        </div>
+
+        <div class="match-result align-self-center">
+            <h1>@String.Format("{0} : {1}", Model.HostScore, Model.GuestScore)</h1>
+        </div>
+
+        <div class="d-flex flex-column justify-content-around">
+            <div class="d-flex">
+                <h2>@Model.GuestTeam.Name</h2>
+                @if (Model.Status.IsMatchStateChangeable && !Model.Status.Default)
+                {
+                    <button class="btn btn-primary add-goal ml-4" data-teamid="Model.Id" data-id="player.Id" data-toggle="modal" data-target="#addGuestGoalModal">Add Goal</button>
+                }
+            </div>
+            <ol>
+                @foreach (var hostPlayer in Model.GuestTeam.Players)
+                {
+                    <li>
+                        @hostPlayer.Name @if (hostPlayer.MatchPlayers.Count != 0)
+                        {<span>( @hostPlayer.MatchPlayers[0].Goals.Count() )</span>}
+                    </li>
+                }
+            </ol>
+        </div>
+
+    </div>
+    @* Actions based on current status *@
+    <div class="match-details-actions d-flex justify-content-end">
+        @if (Model.Status.IsMatchStateChangeable && Model.Status.PermittedActions != null)
+        {
+            @foreach (var action in Model.Status.PermittedActions)
+            {
+                <a asp-controller="Match" asp-action="UpdateStatus" asp-route-matchId="@Model.Id" asp-route-statusId="@action.NewStatusId" class="mx-2 btn btn-primary">@action.Name</a>
+            }
+        }
+    </div>
+</div>
+<!-- Add host goal modal -->
+<div class="modal" id="addHostGoalModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="mb-0 modal-title">Add @Model.HostTeam.Name goal</p>
+            </div>
+            <div class="modal-body">
+                <form id="host-goal-form" method="post" asp-controller="Match" asp-action="UpdateScore">
+                    <input type="hidden" name="matchId" value="@Model.Id">
+                    <input type="hidden" name="teamId" value="@Model.HostTeamId">
+                    <select name="playerId" class="custom-select">
+                        <option selected>Select goal scorer</option>
+                        @foreach (var hostPlayer in Model.HostTeam.Players)
+                        {
+                            <option value="@hostPlayer.Id">@hostPlayer.Name</option>
+                        }
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="host-goal-confirm" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-danger mx-2" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add guest goal modal -->
+<div class="modal" id="addGuestGoalModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="mb-0 modal-title">Add @Model.GuestTeam.Name goal</p>
+            </div>
+            <div class="modal-body">
+                <form id="guest-goal-form" method="post" asp-controller="Match" asp-action="UpdateScore">
+                    <input type="hidden" name="matchId" value="@Model.Id">
+                    <input type="hidden" name="teamId" value="@Model.GuestTeamId">
+                    <select id="add-guest-goal" class="custom-select">
+                        <option selected>Select goal scorer</option>
+                        @foreach (var guestPlayer in Model.GuestTeam.Players)
+                        {
+                            <option value="@guestPlayer.Id">@guestPlayer.Name</option>
+                        }
+                    </select>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="guest-goal-confirm" class="btn btn-primary mx-2" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-danger mx-2" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

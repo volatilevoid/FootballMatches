@@ -30,6 +30,12 @@ namespace FootballMatches
                 .WithMany(s => s.Matches)
                 .HasForeignKey(m => m.StatusId);
 
+            // Status - Permitted action -> 1:n
+            modelBuilder.Entity<StatusAction>()
+                .HasOne(sa => sa.Status)
+                .WithMany(s => s.PermittedActions)
+                .HasForeignKey(sa => sa.StatusId);
+
             // Team - Player -> 1:n
             modelBuilder.Entity<Player>()
                 .HasOne(p => p.Team)
@@ -49,7 +55,7 @@ namespace FootballMatches
                 .HasForeignKey(m => m.GuestTeamId);
             // Set default values for score on match creation
             modelBuilder.Entity<Match>()
-                .Property(m => m.HomeScore)
+                .Property(m => m.HostScore)
                 .HasDefaultValue(0);
             modelBuilder.Entity<Match>()
                 .Property(m => m.GuestScore)
@@ -78,6 +84,10 @@ namespace FootballMatches
             modelBuilder.Entity<Status>().HasData(new Status() { Id = 2, Name = "Finished", Color = "#86db86", IsMatchStateChangeable = false, AreTeamsAvailable = false, Default = false });
             modelBuilder.Entity<Status>().HasData(new Status() { Id = 3, Name = "Canceled", Color = "#db5151", IsMatchStateChangeable = false, AreTeamsAvailable = true, Default = false });
             modelBuilder.Entity<Status>().HasData(new Status() { Id = 4, Name = "In progress", Color = "#8a8fed", IsMatchStateChangeable = true, AreTeamsAvailable = false, Default = false });
+            // Seed permitted acions for each status
+            modelBuilder.Entity<StatusAction>().HasData( new StatusAction() { Id = 1, Name = "Start", StatusId = 1, NewStatusId = 4} );
+            modelBuilder.Entity<StatusAction>().HasData( new StatusAction() { Id = 2, Name = "Cancel", StatusId = 1, NewStatusId = 3} );
+            modelBuilder.Entity<StatusAction>().HasData( new StatusAction() { Id = 3, Name = "FInish", StatusId = 4, NewStatusId = 2} );
 
             // Test
             modelBuilder.Entity<Team>().HasData(new Team() { Id = 1, Name = "AC Milan" });
@@ -97,8 +107,17 @@ namespace FootballMatches
             modelBuilder.Entity<Player>().HasData(new Player() { Id =10, Name="Igrac 24", TeamId = 2});
             modelBuilder.Entity<Player>().HasData(new Player() { Id =11, Name="Igrac 25", TeamId = 2});
             modelBuilder.Entity<Player>().HasData(new Player() { Id =12, Name="Igrac 26", TeamId = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 3, Place = "San Siro", Date = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
-            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Date = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HomeScore = 1, GuestScore = 3});
+            modelBuilder.Entity<Match>().HasData(new Match() { Id = 1, StatusId = 1, Place = "San Siro", Date = new DateTime(2020, 9, 9), HostTeamId = 1, GuestTeamId = 2, GuestScore = 2});
+            modelBuilder.Entity<Match>().HasData(new Match() { Id = 2, StatusId = 2, Place = "Santiago Bernabeu", Date = new DateTime(2020, 9, 9), HostTeamId = 5, GuestTeamId = 4, HostScore = 1, GuestScore = 3});
+            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 1, MatchId = 1, PlayerId = 1 });
+            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 2, MatchId = 1, PlayerId = 1 });
+            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 3, MatchId = 1, PlayerId = 1 });
+            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 4, MatchId = 1, PlayerId = 2 });
+            modelBuilder.Entity<Goal>().HasData(new Goal() { Id = 5, MatchId = 1, PlayerId = 12 });
+            modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 1 });
+            modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 2 });
+            modelBuilder.Entity<MatchPlayer>().HasData(new MatchPlayer() { MatchId = 1, PlayerId = 12 });
+
         }
     }
 }

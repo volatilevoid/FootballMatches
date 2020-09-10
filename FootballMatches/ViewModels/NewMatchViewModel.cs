@@ -8,7 +8,7 @@ namespace FootballMatches.ViewModels
 {
     public class NewMatchViewModel
     {
-        public List<Status> statuses { get; set; }
-        public List<Team> availableTeams { get; set; }
+        public List<Status> Statuses { get; set; }
+        public List<Team> Teams { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace FootballMatches.Models
         public bool AreTeamsAvailable { get; set; }
         public bool Default { get; set; }
         public List<Match> Matches { get; set; }
+        public List<StatusAction> PermittedActions { get; set; }
     }
 }

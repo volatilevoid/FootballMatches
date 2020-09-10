@@ -14,7 +14,7 @@ namespace FootballMatches.Models
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Place { get; set; }
-        public int HomeScore { get; set; }
+        public int HostScore { get; set; }
         public int GuestScore { get; set; }
 
         public int StatusId { get; set; }
