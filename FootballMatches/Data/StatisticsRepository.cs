@@ -21,11 +21,13 @@ namespace FootballMatches.Data
         {
             _context = context;
         }
-        public List<Team> Teams() 
+        public List<Team> Teams()
         {
             return _context.Teams
                 .Include(t => t.HostMatches)
+                    .ThenInclude(hm => hm.Status)
                 .Include(t => t.GuestMatches)
+                    .ThenInclude(gm => gm.Status)
                 .ToList();
         }
         public List<Player> Players()
@@ -36,6 +38,5 @@ namespace FootballMatches.Data
                     .ThenInclude(mp => mp.Goals)
                 .ToList();
         }
-        
     }
 }

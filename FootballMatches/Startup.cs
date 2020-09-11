@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FootballMatches.API;
 using FootballMatches.Data;
 using FootballMatches.Models;
 using Microsoft.AspNetCore.Builder;
@@ -27,8 +28,10 @@ namespace FootballMatches
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             /**
              * Configure SQLite in memory connection and add DB context
              * 
@@ -44,10 +47,14 @@ namespace FootballMatches
             {
                 options.UseSqlite(keepAliveConnection);
             });
+
             // Register repositories in service container
             services.AddTransient<ITeamRepository, TeamRepository>();
             services.AddTransient<IMatchRepository, MatchRepository>();
             services.AddTransient<IStatisticsRepository, StatisticsRepository>();
+            // Web API
+            services.AddTransient<IWebApiRepository, WebApiRepository>();
+            services.AddTransient<IMatchResponseFormatService, MatchResponseFormatService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,9 +79,14 @@ namespace FootballMatches
 
             app.UseEndpoints(endpoints =>
             {
+                // MVC routes map
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                // API routes map
+                endpoints.MapControllerRoute(
+                    name: "api",
+                    pattern: "api/{controller=FootballApi}/{action=Get}/{id?}");
             });
 
             // Migrate tables on start

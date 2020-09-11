@@ -76,18 +76,23 @@ namespace FootballMatches.Controllers
             {
                 WinDrawLossViewModel hostScores = ParseHostScores(team.HostMatches);
                 WinDrawLossViewModel guestScores = ParseGuestScores(team.GuestMatches);
-                WinDrawLossViewModel totalScores = new WinDrawLossViewModel()
-                {
-                    Win = hostScores.Win + guestScores.Win,
-                    Draw = hostScores.Draw + guestScores.Draw,
-                    Loss = hostScores.Loss + guestScores.Loss
-                };
+                //WinDrawLossViewModel totalScores = new WinDrawLossViewModel()
+                //{
+                //    Win = hostScores.Win + guestScores.Win,
+                //    Draw = hostScores.Draw + guestScores.Draw,
+                //    Loss = hostScores.Loss + guestScores.Loss
+                //};
 
                 TeamStatistics teamStats = new TeamStatistics()
                 {
                     TeamId = team.Id,
                     TeamName = team.Name,
-                    Statistics = new WinDrawLossViewModel[3] { hostScores, guestScores, totalScores }
+                    Statistics = new WinDrawLossViewModel 
+                    {
+                        Win = hostScores.Win + guestScores.Win,
+                        Draw = hostScores.Draw + guestScores.Draw,
+                        Loss = hostScores.Loss + guestScores.Loss
+                    }
                 };
                 allTeamsStatistics.Add(teamStats);
             }
@@ -104,17 +109,20 @@ namespace FootballMatches.Controllers
             };
             foreach(Match match in matches)
             {
-                if(match.HostScore == match.GuestScore)
+                if (IsMatchFinishedRegulary(match))
                 {
-                    stats.Draw += 1;
-                }
-                else if(match.HostScore > match.GuestScore)
-                {
-                    stats.Win += 1;
-                }
-                else
-                {
-                    stats.Loss += 1;
+                    if (match.HostScore == match.GuestScore)
+                    {
+                        stats.Draw += 1;
+                    }
+                    else if (match.HostScore > match.GuestScore)
+                    {
+                        stats.Win += 1;
+                    }
+                    else
+                    {
+                        stats.Loss += 1;
+                    }
                 }
             }
             return stats;
@@ -127,22 +135,38 @@ namespace FootballMatches.Controllers
                 Draw = 0,
                 Loss = 0
             };
+
             foreach (Match match in matches)
             {
-                if (match.HostScore == match.GuestScore)
+                if (IsMatchFinishedRegulary(match))
                 {
-                    stats.Draw += 1;
-                }
-                else if (match.HostScore < match.GuestScore)
-                {
-                    stats.Win += 1;
-                }
-                else
-                {
-                    stats.Loss += 1;
+                    if (match.HostScore == match.GuestScore)
+                    {
+                        stats.Draw += 1;
+                    }
+                    else if (match.HostScore < match.GuestScore)
+                    {
+                        stats.Win += 1;
+                    }
+                    else
+                    {
+                        stats.Loss += 1;
+                    }
                 }
             }
             return stats;
+        }
+        private bool IsMatchFinishedRegulary(Match match)
+        {
+            if(match.Status.Default || (!match.Status.IsMatchStateChangeable && match.Status.AreTeamsAvailable))
+            {
+                // Not started or canceled
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

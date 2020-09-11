@@ -15,6 +15,6 @@ namespace FootballMatches.ViewModels
     {
         public int TeamId { get; set; }
         public string TeamName { get; set; }
-        public WinDrawLossViewModel[] Statistics { get; set; }
+        public WinDrawLossViewModel Statistics { get; set; }
     }
 }
